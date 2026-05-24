@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FlowSync — Helping Enterprise Teams Work Smarter</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --plum: #2D1B3D;
+    --orange: #FF4F00;
+    --orange-light: #FFF0EB;
+    --lavender: #EDE9F5;
+    --lavender-mid: #C4B5D6;
+    --navy: #14213D;
+    --dark: #1A1A1A;
+    --gray: #6B7280;
+    --light-gray: #F5F7FA;
+    --white: #ffffff;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background-color: var(--white);
+    color: var(--dark);
+    overflow-x: hidden;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid #EBEBEB;
+    padding: 0 48px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo-icon {
+    width: 32px; height: 32px;
+    background: var(--orange);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Sora', sans-serif;
+    font-size: 13px;
+    font-weight: 800;
+    color: white;
+  }
+
+  .nav-logo-text {
+    font-family: 'Sora', sans-serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--dark);
+  }
+
+  .nav-logo-text span { color: var(--orange); }
+
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    list-style: none;
+  }
+
+  .nav-links a {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--dark); }
+
+  .nav-cta {
+    background: var(--orange);
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 8px;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    transition: opacity 0.2s !important;
+  }
+
+  .nav-cta:hover { opacity: 0.88; }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    background: var(--plum);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 120px 24px 80px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -200px; left: 50%;
+    transform: translateX(-50%);
+    width: 800px; height: 800px;
+    background: radial-gradient(circle, rgba(255,79,0,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: rgba(255,79,0,0.15);
+    border: 1px solid rgba(255,79,0,0.3);
+    color: var(--orange);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    padding: 6px 16px;
+    border-radius: 100px;
+    margin-bottom: 28px;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(36px, 6vw, 68px);
+    font-weight: 800;
+    color: white;
+    line-height: 1.1;
+    letter-spacing: -1.5px;
+    max-width: 800px;
+    margin: 0 auto 24px;
+  }
+
+  .hero h1 span { color: var(--orange); }
+
+  .hero p {
+    font-size: 18px;
+    color: rgba(255,255,255,0.6);
+    max-width: 520px;
+    margin: 0 auto 48px;
+    line-height: 1.75;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    background: var(--orange);
+    color: white;
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.2s, transform 0.2s;
+    display: inline-block;
+  }
+
+  .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+  .btn-secondary {
+    background: rgba(255,255,255,0.08);
+    color: white;
+    border: 1px solid rgba(255,255,255,0.2);
+    padding: 14px 32px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.2s;
+    display: inline-block;
+  }
+
+  .btn-secondary:hover { background: rgba(255,255,255,0.14); }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--lavender);
+    padding: 40px 48px;
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    flex-wrap: wrap;
+  }
+
+  .stat { text-align: center; }
+
+  .stat-number {
+    font-family: 'Sora', sans-serif;
+    font-size: 32px;
+    font-weight: 800;
+    color: var(--plum);
+    display: block;
+  }
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--gray);
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* SECTIONS SHARED */
+  section {
+    padding: 100px 24px;
+  }
+
+  .section-inner {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    display: inline-block;
+    background: var(--orange);
+    color: white;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    padding: 5px 14px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .section-title {
+    font-family: 'Sora', sans-serif;
+    font-size: clamp(28px, 4vw, 42px);
+    font-weight: 700;
+    color: var(--dark);
+    line-height: 1.2;
+    letter-spacing: -0.8px;
+    margin-bottom: 16px;
+  }
+
+  .section-subtitle {
+    font-size: 16px;
+    color: var(--gray);
+    line-height: 1.75;
+    max-width: 560px;
+    margin-bottom: 56px;
+  }
+
+  /* REVIEW SECTION */
+  #review {
+    background: var(--white);
+  }
+
+  .review-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: center;
+  }
+
+  .review-card {
+    background: var(--lavender);
+    border-radius: 16px;
+    padding: 40px;
+  }
+
+  .review-card h3 {
+    font-family: 'Sora', sans-serif;
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--plum);
+    margin-bottom: 12px;
+  }
+
+  .review-card p {
+    font-size: 14px;
+    color: var(--gray);
+    line-height: 1.75;
+    margin-bottom: 28px;
+  }
+
+  .check-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 32px;
+  }
+
+  .check-list li {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    color: var(--dark);
+    line-height: 1.6;
+  }
+
+  .check-icon {
+    width: 20px; height: 20px;
+    background: var(--orange-light);
+    border: 1.5px solid var(--orange);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 10px;
+    color: var(--orange);
+    font-weight: 700;
+  }
+
+  /* SUPPORT SECTION */
+  #support {
+    background: var(--plum);
+  }
+
+  #support .section-title { color: white; }
+  #support .section-subtitle { color: rgba(255,255,255,0.6); }
+
+  .support-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .support-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 12px;
+    padding: 28px;
+  }
+
+  .support-card-icon {
+    font-size: 28px;
+    margin-bottom: 16px;
+    display: block;
+  }
+
+  .support-card h4 {
+    font-family: 'Sora', sans-serif;
+    font-size: 16px;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 8px;
+  }
+
+  .support-card p {
+    font-size: 13px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+  }
+
+  .support-contact {
+    background: rgba(255,79,0,0.1);
+    border: 1px solid rgba(255,79,0,0.25);
+    border-radius: 12px;
+    padding: 32px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .support-contact-text h4 {
+    font-family: 'Sora', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 6px;
+  }
+
+  .support-contact-text p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.55);
+  }
+
+  /* NEXT STEPS SECTION */
+  #next-steps {
+    background: var(--lavender);
+  }
+
+  .steps-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-bottom: 48px;
+  }
+
+  .step-card {
+    background: white;
+    border-radius: 12px;
+    padding: 32px 28px;
+    position: relative;
+  }
+
+  .step-number {
+    font-family: 'Sora', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    color: var(--orange-light);
+    line-height: 1;
+    margin-bottom: 16px;
+  }
+
+  .step-card h4 {
+    font-family: 'Sora', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  .step-card p {
+    font-size: 13px;
+    color: var(--gray);
+    line-height: 1.7;
+  }
+
+  .next-steps-cta {
+    background: var(--plum);
+    border-radius: 16px;
+    padding: 48px;
+    text-align: center;
+  }
+
+  .next-steps-cta h3 {
+    font-family: 'Sora', sans-serif;
+    font-size: 26px;
+    font-weight: 700;
+    color: white;
+    margin-bottom: 12px;
+  }
+
+  .next-steps-cta p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.6);
+    margin-bottom: 32px;
+    line-height: 1.7;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--plum);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    padding: 40px 48px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .footer-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+
+  .footer-logo-icon {
+    width: 28px; height: 28px;
+    background: var(--orange);
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Sora', sans-serif;
+    font-size: 11px;
+    font-weight: 800;
+    color: white;
+  }
+
+  .footer-logo-text {
+    font-family: 'Sora', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: white;
+  }
+
+  .footer-logo-text span { color: var(--orange); }
+
+  .footer-copy {
+    font-size: 12px;
+    color: rgba(255,255,255,0.35);
+  }
+
+  /* ANIMATIONS */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+  }
+
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* RESPONSIVE */
+  @media (max-width: 768px) {
+    nav { padding: 0 24px; }
+    .nav-links { display: none; }
+    .stats-bar { gap: 40px; padding: 40px 24px; }
+    .review-grid { grid-template-columns: 1fr; }
+    .support-grid { grid-template-columns: 1fr; }
+    .steps-grid { grid-template-columns: 1fr; }
+    .support-contact { flex-direction: column; text-align: center; }
+    footer { flex-direction: column; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">FS</div>
+    <span class="nav-logo-text">Flow<span>Sync</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#review">Workflow Review</a></li>
+    <li><a href="#support">Support</a></li>
+    <li><a href="#next-steps">Next Steps</a></li>
+    <li><a href="#support" class="nav-cta">Get Support</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div>
+    <div class="hero-badge">Enterprise Workflow Platform</div>
+    <h1>Helping enterprise teams <span>work smarter.</span></h1>
+    <p>FlowSync gives your team the visibility, coordination, and efficiency tools to keep operations running smoothly at every stage of growth.</p>
+    <div class="hero-buttons">
+      <a href="#review" class="btn-primary">Review Your Workflow Setup</a>
+      <a href="#support" class="btn-secondary">Talk to Support</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat">
+    <span class="stat-number">2,400+</span>
+    <span class="stat-label">Enterprise Teams</span>
+  </div>
+  <div class="stat">
+    <span class="stat-number">98%</span>
+    <span class="stat-label">Client Retention Rate</span>
+  </div>
+  <div class="stat">
+    <span class="stat-number">40%</span>
+    <span class="stat-label">Average Efficiency Gain</span>
+  </div>
+  <div class="stat">
+    <span class="stat-number">24/7</span>
+    <span class="stat-label">Dedicated Support</span>
+  </div>
+</div>
+
+<!-- REVIEW SECTION -->
+<section id="review">
+  <div class="section-inner">
+    <span class="section-label">Workflow Review</span>
+    <h2 class="section-title">Let's make sure FlowSync is still working for your team.</h2>
+    <p class="section-subtitle">As your operations evolve, your workflows should too. Book a quick review session and we'll help you identify where things can be optimised.</p>
+
+    <div class="review-grid fade-in">
+      <div>
+        <ul class="check-list">
+          <li>
+            <div class="check-icon">&#10003;</div>
+            Audit your current workflow setup against your operational goals
+          </li>
+          <li>
+            <div class="check-icon">&#10003;</div>
+            Identify visibility gaps slowing down cross-team coordination
+          </li>
+          <li>
+            <div class="check-icon">&#10003;</div>
+            Get specific recommendations tailored to how your team works today
+          </li>
+          <li>
+            <div class="check-icon">&#10003;</div>
+            Walk away with a clear action plan for the next 90 days
+          </li>
+        </ul>
+        <a href="mailto:support@flowsync.com?subject=Workflow Review Request" class="btn-primary">Book Your Workflow Review</a>
+      </div>
+
+      <div class="review-card">
+        <h3>What to expect</h3>
+        <p>A focused 30-minute session with a FlowSync specialist. No sales pitch — just a genuine look at how your team is using the platform and where you can get more value.</p>
+        <p style="font-size:13px; color:#9CA3AF;">Sessions available Monday to Friday, 9am to 6pm.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SUPPORT SECTION -->
+<section id="support">
+  <div class="section-inner">
+    <span class="section-label">Support</span>
+    <h2 class="section-title">We're here whenever your team needs us.</h2>
+    <p class="section-subtitle">Whether it's a quick question or a deeper operational challenge, our support team is available to help you get the most out of FlowSync.</p>
+
+    <div class="support-grid fade-in">
+      <div class="support-card">
+        <span class="support-card-icon">&#128172;</span>
+        <h4>Live Chat</h4>
+        <p>Reach our team directly through the platform for fast answers to your questions.</p>
+      </div>
+      <div class="support-card">
+        <span class="support-card-icon">&#128233;</span>
+        <h4>Email Support</h4>
+        <p>Send us a detailed message and we'll respond with a thorough, personalised solution.</p>
+      </div>
+      <div class="support-card">
+        <span class="support-card-icon">&#128222;</span>
+        <h4>Dedicated Call</h4>
+        <p>Book a call with your account specialist to work through any operational challenges together.</p>
+      </div>
+    </div>
+
+    <div class="support-contact fade-in">
+      <div class="support-contact-text">
+        <h4>Ready to connect with our support team?</h4>
+        <p>Our team typically responds within 2 business hours.</p>
+      </div>
+      <a href="mailto:support@flowsync.com?subject=Support Request" class="btn-primary">Connect With Support</a>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT STEPS SECTION -->
+<section id="next-steps">
+  <div class="section-inner">
+    <span class="section-label">Next Steps</span>
+    <h2 class="section-title">Let's plan what the next phase looks like for your team.</h2>
+    <p class="section-subtitle">Your operations are always evolving. Let's make sure FlowSync evolves with you and keeps delivering value at every stage.</p>
+
+    <div class="steps-grid fade-in">
+      <div class="step-card">
+        <div class="step-number">01</div>
+        <h4>Review where you are</h4>
+        <p>We start by understanding how your team is currently using FlowSync and where the biggest opportunities are.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">02</div>
+        <h4>Refine your workflows</h4>
+        <p>We align the platform with how your operations actually work today, not how they worked when you first onboarded.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-number">03</div>
+        <h4>Plan ahead together</h4>
+        <p>We map out what the next 6 to 12 months look like and make sure FlowSync is set up to support your growth.</p>
+      </div>
+    </div>
+
+    <div class="next-steps-cta fade-in">
+      <h3>Ready to plan your next steps?</h3>
+      <p>Let's reconnect and make sure your team is set up for long-term success with FlowSync.</p>
+      <a href="mailto:support@flowsync.com?subject=Next Steps Planning Session" class="btn-primary">Plan Your Next Steps With FlowSync</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="footer-logo">
+    <div class="footer-logo-icon">FS</div>
+    <span class="footer-logo-text">Flow<span>Sync</span></span>
+  </a>
+  <span class="footer-copy">Helping enterprise teams work smarter. &nbsp;&#183;&nbsp; support@flowsync.com</span>
+  <span class="footer-copy">&copy; 2025 FlowSync Inc. All rights reserved.</span>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.15 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
